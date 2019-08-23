@@ -1,4 +1,4 @@
-<form action="#" method="POST">
+<form action="{{ route('carts.store', $product) }}" method="POST">
 
     @csrf
 

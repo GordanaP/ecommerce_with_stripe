@@ -15,6 +15,17 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
+
+                <!-- Shopping Cart -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('carts.index', Auth::user() ?? '') }}">
+                        <i class="fa fa-shopping-cart fa-lg"></i>
+                        <span class="badge relative" style="top: -12px; right: 10px">
+                            {{ ShoppingCart::fromSession()->sum('quantity') }}
+                        </span>
+                    </a>
+                </li>
+
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">

@@ -228,6 +228,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Calculator' => App\Facades\Calculator::class,
+        'ShoppingCart' => App\Facades\ShoppingCart::class,
     ],
 
 ];
