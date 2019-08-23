@@ -30,3 +30,7 @@ Route::get('user-checkout/{user?}','Checkout\CheckoutController@index')
     ->name('checkouts.index');
 Route::post('user-checkout/{user?}','Checkout\CheckoutController@store')
     ->name('checkouts.store');
+Route::get('checkout/payment/success','Checkout\CheckoutSuccessController')
+    ->name('checkouts.success');
+Route::get('checkout/payment/error','Checkout\CheckoutErrorController')
+    ->name('checkouts.error');

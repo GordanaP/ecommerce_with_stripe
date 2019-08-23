@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Checkout;
 
 use App\User;
+use Stripe\Stripe;
+use Stripe\Error\Base;
+use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
+use App\Facades\ShoppingCart;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
@@ -21,16 +26,6 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -38,51 +33,68 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        $payment_method_id = $request->payment_method_id;
+        $payment_intent_id = $request->payment_intent_id;
+        $intent = null;
+
+        try {
+            if ($payment_method_id)
+            {
+                $intent = PaymentIntent::create([
+                    'payment_method' => $payment_method_id,
+                    'amount' => ShoppingCart::fromSession()->getTotalInCents(),
+                    'currency' => 'usd',
+                    'confirmation_method' => 'manual',
+                    'confirm' => true,
+                ],
+                [
+                    'idempotency_key' => Session::getId()
+                ]);
+            }
+
+            if($payment_intent_id)
+            {
+                $intent = PaymentIntent::retrieve($payment_intent_id);
+                $intent->confirm();
+            }
+
+            return $this->generatePaymentResponse($intent);
+
+        } catch (Base $e) {
+            return response([
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Generate payment response.
      *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
+     * @param  PaymentIntent obkect
+     * @return mixed
      */
-    public function show(User $user)
+    protected function generatePaymentResponse($intent)
     {
-        //
-    }
+        if ($intent->status == 'requires_action' &&
+        $intent->next_action->type == 'use_stripe_sdk') {
+            return response([
+                'requires_action' => true,
+                'payment_intent_client_secret' => $intent->client_secret
+            ]);
+        } else if ($intent->status == 'succeeded') {
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
-    }
+            ShoppingCart::fromSession()->destroy();
+            Session::regenerate();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-        //
+            return response([
+                'success' => route('checkouts.success')
+            ]);
+        } else {
+            return response([
+                'error' => route('checkouts.error')
+            ]);
+        }
     }
 }
