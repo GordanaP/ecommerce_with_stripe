@@ -5,6 +5,7 @@
 @section('content')
 
     <h4>Our Products</h4>
+
     <hr>
 
     @include('alerts._success')

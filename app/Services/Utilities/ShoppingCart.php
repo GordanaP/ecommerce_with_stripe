@@ -23,7 +23,6 @@ class ShoppingCart extends Collection
      *
      * @param \App\Product  $product
      * @param integer $quantity
-     * @return void
      */
     public function add($product, $quantity = 1)
     {
@@ -35,11 +34,10 @@ class ShoppingCart extends Collection
     }
 
     /**
-     * Update a cart item's quantity.
+     * Update the cart item's quantity.
      *
      * @param  \App\Product $product
      * @param  integer $quantity
-     * @return void
      */
     public function update($product, $quantity)
     {
@@ -52,7 +50,6 @@ class ShoppingCart extends Collection
      * Remove an item from the cart.
      *
      * @param  integer $productId
-     * @return void
      */
     public function remove($productId)
     {
@@ -62,9 +59,7 @@ class ShoppingCart extends Collection
     }
 
     /**
-     * Remove all products from the cart.
-     *
-     * @return void
+     * Remove all items from the cart.
      */
     public function destroy()
     {
@@ -72,34 +67,7 @@ class ShoppingCart extends Collection
     }
 
     /**
-     * Add a customer's address to the cart.
-     *
-     * @param  \Illuminate\Support\Collection $address
-     * @return void
-     */
-    public function complete($address)
-    {
-        $this->put('address', $address);
-
-        $this->save();
-    }
-
-    /**
-     * Get the cart's owner.
-     *
-     * @param  string $address
-     * @param  string $type
-     * @return array
-     */
-    public function getOwner($address, $type)
-    {
-        return $this->get($address)->get($type);
-    }
-
-    /**
-     * Present the cart's total in dollars and the currency.
-     *
-     * @return string
+     * Present the cart's total in dollars.
      */
     public function presentTotal()
     {
@@ -107,7 +75,7 @@ class ShoppingCart extends Collection
     }
 
     /**
-     * Present the cart's shipping costs in dollars and the currency.
+     * Present the cart's shipping costs in dollars.
      *
      * @return string
      */
@@ -117,7 +85,7 @@ class ShoppingCart extends Collection
     }
 
     /**
-     * Present the cart's tax amount in dollars and the currency.
+     * Present the cart's tax amount in dollars.
      *
      * @return string
      */
@@ -126,13 +94,16 @@ class ShoppingCart extends Collection
         return Str::presentInDollars($this->getTaxAmountInCents());
     }
 
+    /**
+     * Present the tax rate.
+     */
     public function presentTaxRate()
     {
-        return Str::presentAsPercent(config('cart.tax'));
+        return Str::presentAsPercent(config('cart.tax_rate'));
     }
 
     /**
-     * Present the cart's subtotal in dollars and the currency.
+     * Present the cart's subtotal in dollars.
      *
      * @return string
      */
@@ -199,7 +170,7 @@ class ShoppingCart extends Collection
      */
     public function getTaxAmountInCents()
     {
-        $taxAmount = Calculator::multiply($this->getSubtotalInCents(), config('cart.tax'));
+        $taxAmount = Calculator::multiply($this->getSubtotalInCents(), config('cart.tax_rate'));
 
         return round($taxAmount);
     }
@@ -212,6 +183,11 @@ class ShoppingCart extends Collection
     public function getSubtotalInCents()
     {
         return $this->sum('subtotal_in_cents');
+    }
+
+    public function getProducts()
+    {
+        return array_values($this->toArray());
     }
 
     /**

@@ -11,7 +11,7 @@ class Calculator
      * @param  mixed $b
      * @return mixed
      */
-    public function multiply($a, $b)
+    public static function multiply($a, $b)
     {
         return $a * $b;
     }
@@ -23,7 +23,7 @@ class Calculator
      * @param  mixed $b
      * @return mixed
      */
-    public function divide($a, $b, $decimals = 2)
+    public static function divide($a, $b, $decimals = 2)
     {
         return number_format(($a / $b), $decimals);
     }
@@ -35,7 +35,7 @@ class Calculator
      * @param  mixed $b
      * @return mixed
      */
-    public function add($a, $b)
+    public static function add($a, $b)
     {
         return $a + $b;
     }
@@ -47,8 +47,8 @@ class Calculator
      * @param  mixed $b
      * @return mixed
      */
-    public function subtract($a, $b)
+    public static function subtract($a, $b)
     {
-        return $a / $b;
+        return $a - $b;
     }
 }

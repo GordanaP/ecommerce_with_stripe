@@ -25,11 +25,24 @@ class MacroServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        /**
+         * Present product price in dollars.
+         */
         Str::macro('presentInDollars', function ($price_in_cents) {
 
             $priceInDollars = Calculator::divide($price_in_cents, 100);
 
             return '$'.$priceInDollars;
+        });
+
+        /**
+         * Present in percens.
+         */
+        Str::macro('presentAsPercent', function ($float) {
+
+            $product = Calculator::multiply($float, 100);
+
+            return $product.'%';
         });
     }
 }

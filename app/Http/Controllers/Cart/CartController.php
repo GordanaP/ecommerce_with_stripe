@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cart;
 
+use App\User;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Facades\ShoppingCart;
@@ -14,15 +15,20 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user = null)
     {
-        //
+        $cartItems = ShoppingCart::fromSession();
+
+        return view('carts.index')->with([
+            'user' =>  $user ?? '',
+            'cartItems' => $cartItems
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\QuantityRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, Product $product)
@@ -35,13 +41,19 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\QuantityRequest  $request
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'quantity' => 'required|integer|between: 1,5'
+        ]);
+
+        ShoppingCart::fromSession()->update($product, $request->quantity);
+
+        return back()->with('success', 'The selected quantity has been updated.');;
     }
 
     /**
@@ -52,16 +64,20 @@ class CartController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        ShoppingCart::fromSession()->remove($product->id);
+
+        return back()->with('success', 'The selected product has been removed from cart.');;
     }
 
     /**
-     * Empty the cart.
+     * Remove all items from the cart.
      *
      * @return \Illuminate\Http\Response
      */
     public function empty()
     {
+        ShoppingCart::fromSession()->destroy();
 
+        return redirect()->route('carts.index')->with('success', 'The cart is empty now.');;
     }
 }

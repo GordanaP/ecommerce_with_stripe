@@ -17,8 +17,8 @@ Route::get('/products', 'Product\ProductController@index')
 /**
  * CartItem
  */
-Route::get('carts/{user?}', 'Cart\CartController@index')->name('carts.index');
-Route::delete('carts', 'Cart\CartController@empty')->name('carts.empty');
-Route::post('carts/{product}', 'Cart\CartController@store')->name('carts.store');
-Route::patch('carts/{product}', 'Cart\CartController@update')->name('carts.update');
-Route::delete('carts/{product}', 'Cart\CartController@destroy')->name('carts.destroy');
+Route::get('user-cart/{user?}', 'Cart\CartController@index')->name('carts.index');
+Route::post('user-cart/products/{product}', 'Cart\CartController@store')->name('carts.store');
+Route::patch('user-cart/products/{product}', 'Cart\CartController@update')->name('carts.update');
+Route::delete('user-cart/products/{product}', 'Cart\CartController@destroy')->name('carts.destroy');
+Route::delete('user-cart', 'Cart\CartController@empty')->name('carts.empty');
