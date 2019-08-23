@@ -22,3 +22,11 @@ Route::post('user-cart/products/{product}', 'Cart\CartController@store')->name('
 Route::patch('user-cart/products/{product}', 'Cart\CartController@update')->name('carts.update');
 Route::delete('user-cart/products/{product}', 'Cart\CartController@destroy')->name('carts.destroy');
 Route::delete('user-cart', 'Cart\CartController@empty')->name('carts.empty');
+
+/**
+ * Checkout
+ */
+Route::get('user-checkout/{user?}','Checkout\CheckoutController@index')
+    ->name('checkouts.index');
+Route::post('user-checkout/{user?}','Checkout\CheckoutController@store')
+    ->name('checkouts.store');

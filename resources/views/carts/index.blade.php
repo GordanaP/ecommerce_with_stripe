@@ -4,7 +4,12 @@
 
 @section('content')
 
-    <h4>Shoppping cart</h4>
+    <div class="flex justify-between items-center">
+        <h4>Shoppping cart</h4>
+        <a href="{{ route('checkouts.index', $user) }}" class="btn btn-primary">
+            Checkout
+        </a>
+    </div>
 
     <hr>
 
