@@ -13,31 +13,11 @@
     <hr>
 
     <section id="cartInfo" class="flex justify-center mb-4">
-        @include('checkouts.partials._cart_info')
+        @include('checkouts.partials.html._cart_info')
     </section>
 
     <section id="paymentInfo" class="w-2/5 mx-auto py-3 py-4 bg-gray-200 border border-gray-300">
-        <div class="w-3/4 mx-auto">
-            <p class="text-lg font-medium mt-0">Payment Information</p>
-
-            <div class="form-group">
-                <label for="cardholderName">Cardholder Name</label>
-                <input  type="text" class="form-control" placeholder="Name on card"
-                 id="cardholderName">
-            </div>
-
-            <div class="form-group">
-                <label>Card Details</label>
-                <div id="cardElement">
-                    <!-- A Stripe Element will be inserted here. -->
-                </div>
-            </div>
-
-            <button type="button" class="btn btn-primary btn-block mt-2"
-                id="cardButton">
-                Make a secure payment
-            </button>
-        </div>
+        @include('checkouts.partials.html._payment_info')
     </section>
 
 @endsection
@@ -45,79 +25,7 @@
 @section('scripts')
     <script>
 
-        // Stripe public key
-        var stripe = Stripe("{{ config('services.stripe.key') }}");
-
-        // Stripe Element
-        var elements = stripe.elements();
-        var cardElement = elements.create('card');
-        cardElement.mount('#cardElement');
-
-        // Stripe Payment
-        var cardholderName = document.querySelector('#cardholderName');
-        var cardButton = document.querySelector('#cardButton');
-        var checkoutStoreUrl = "{{ route('checkouts.store', $user) }}";
-
-        cardButton.addEventListener('click', function() {
-            // Create paymentMethod id
-            stripe.createPaymentMethod('card', cardElement, {
-                billing_details: {name: cardholderName.value}
-            })
-            .then(function(result) {
-                if(result.error) {
-                    console.log(result.error)
-                } else {
-                    // Send paymentMethod id to the server
-                    $.ajax({
-                        url: checkoutStoreUrl,
-                        type: 'POST',
-                        data: {
-                            payment_method_id: result.paymentMethod.id
-                        }
-                    })
-                    .then(function(response) {
-                        // Handle server response
-                        handleServerResponse(response)
-                    });
-                }
-            });
-        });
-
-        /**
-         * Handle server response
-         */
-        function handleServerResponse(response) {
-            if (response.error) {
-                console.log(response.error)
-            } else if (response.requires_action) {
-                // Create paymentIntent client secret
-                stripe.handleCardAction(
-                    response.payment_intent_client_secret
-                )
-                .then(function(result) {
-                    if (result.error) {
-                        console.log(result.error)
-                    } else {
-                        // Send paymentIntent id back to server
-                        $.ajax({
-                            url: checkoutStoreUrl,
-                            type: 'POST',
-                            data: {
-                                payment_intent_id: result.paymentIntent.id
-                            }
-                        })
-                        .then(function(confirmResult) {
-                            return confirmResult;
-                        });
-                    }
-                });
-            } else {
-
-                $('form').trigger('reset');
-
-                window.location.replace(response.success)
-            }
-        }
+        @include('checkouts.partials.js._stripe_payment')
 
     </script>
 @endsection
