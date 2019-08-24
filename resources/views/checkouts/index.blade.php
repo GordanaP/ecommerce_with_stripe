@@ -9,7 +9,6 @@
 @section('content')
 
     <h4>Checkout</h4>
-
     <hr>
 
     <section id="cartInfo" class="flex justify-center mb-4">

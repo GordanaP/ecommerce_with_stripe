@@ -68,6 +68,8 @@ class ShoppingCart extends Collection
 
     /**
      * Present the cart's total in dollars.
+     *
+     * @return  string
      */
     public function presentTotal()
     {
@@ -96,6 +98,8 @@ class ShoppingCart extends Collection
 
     /**
      * Present the tax rate.
+     *
+     * @return  string
      */
     public function presentTaxRate()
     {
@@ -185,9 +189,14 @@ class ShoppingCart extends Collection
         return $this->sum('subtotal_in_cents');
     }
 
-    public function getProducts()
+    /**
+     * Get cart items.
+     *
+     * @return Illuminate\Support\Collection
+     */
+    public function getItems()
     {
-        return array_values($this->toArray());
+        return $this->values();
     }
 
     /**

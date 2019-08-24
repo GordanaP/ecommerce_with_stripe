@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Order;
 use Keygen\Keygen;
 use Stripe\PaymentIntent;
 use App\Facades\ShoppingCart;
@@ -36,7 +35,7 @@ trait Payable
     }
 
     /**
-     * Generate payment response.
+     * Generate the payment response.
      *
      * @param  \App\User $user
      * @param  \Stripe\PaymentIntent $intent
@@ -52,13 +51,7 @@ trait Payable
             ]);
         } else if ($intent->status == 'succeeded') {
 
-            $order = Order::getFromShoppingCart()
-                ->completePayment($intent);
-
-            $user->customer->placeOrder($order);
-
-            ShoppingCart::fromSession()->destroy();
-            Session::regenerate();
+            $user->customer->completePurchase($intent);
 
             return response([
                 'success' => route('checkouts.success')

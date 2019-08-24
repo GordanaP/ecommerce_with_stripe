@@ -59,6 +59,4 @@ class CheckoutController extends Controller
             ]);
         }
     }
-
-
 }

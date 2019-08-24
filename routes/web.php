@@ -1,11 +1,11 @@
 <?php
 
-Route::get('/test/{user?}', 'TestController@index')->name('test.index');
-Route::post('/test/{user?}', 'TestController@store')->name('test.store');
-
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/test/{user?}', 'TestController@index')->name('test.index');
+Route::post('/test/{user?}', 'TestController@store')->name('test.store');
 
 Auth::routes();
 

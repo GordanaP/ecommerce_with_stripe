@@ -13,6 +13,7 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param \App\User $user | null
      * @return \Illuminate\Http\Response
      */
     public function index(User $user = null)
@@ -29,6 +30,7 @@ class CartController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\QuantityRequest  $request
+     * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, Product $product)

@@ -10,7 +10,7 @@ class DatabaseSeeder extends Seeder
      * @var array
      */
     protected $tables = [
-        'users', 'products', 'customers', 'orders'
+        'users', 'products', 'customers', 'orders', 'order_product'
     ];
 
     /**
@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductsTableSeeder::class);
         $this->call(CustomersTableSeeder::class);
         $this->call(OrdersTableSeeder::class);
+        $this->call(OrderProductTableSeeder::class);
     }
 
     /**
