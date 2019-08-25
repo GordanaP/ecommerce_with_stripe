@@ -16,6 +16,12 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('test.index', Auth::user() ?? '') }}">
+                        <span>Test Page</span>
+                    </a>
+                </li>
+
             </ul>
 
             <!-- Right Side Of Navbar -->

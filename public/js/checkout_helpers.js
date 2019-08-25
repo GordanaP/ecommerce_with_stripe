@@ -1,19 +1,21 @@
 /**
  * Get the checked address.
  *
- * @param  string billing
- * @param  array addressFields
+ * @param  array billingAddress
+ * @param  array shippingAddress
  * @return array
  */
-function getCheckedAddress(checkbox, billing, shipping, addressFields)
+function getCheckedAddress(checkbox, billingAddress, shippingAddress)
 {
-    var address = {
-        'billing': getAddress(billing, addressFields)
-    };
-
     if (isChecked(checkbox)) {
-        address['check_delivery'] = 'on';
-        address['shipping'] = getAddress(shipping, addressFields);
+        var address = {
+            billing: billingAddress,
+            shipping: shippingAddress
+        }
+    } else {
+        var address = {
+            billing: billingAddress,
+        }
     }
 
     return address;
@@ -60,7 +62,7 @@ function getById(fieldId)
  * @param  {string} fieldId
  * @return void
  */
-function toggleHiddenFieldVisibility(fieldId)
+function toggleVisibility(fieldId)
 {
     return $(fieldId).toggle();
 }

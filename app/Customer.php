@@ -4,11 +4,14 @@ namespace App;
 
 use App\Order;
 use App\Facades\ShoppingCart;
+use App\Traits\Customer\HasAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 
 class Customer extends Model
 {
+    use HasAttributes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,26 +23,6 @@ class Customer extends Model
     ];
 
     /**
-     * Get the full_name attribute.
-     *
-     * @return string
-     */
-    public function getFullNameAttribute()
-    {
-        return $this->first_name . ' '. $this->last_name;
-    }
-
-    /**
-     * Get the postal_code attribute.
-     *
-     * @return string
-     */
-    public function getPostalCodeCityAttribute()
-    {
-        return $this->postal_code . ' '. $this->city;
-    }
-
-    /**
      * Get the user that owns the customer.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -47,6 +30,16 @@ class Customer extends Model
     public function user()
     {
         return $this->belongsTo(App\User::class);
+    }
+
+    /**
+     * Get the shippings that belong to the customer.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function shippings()
+    {
+        return $this->hasMany(Shipping::class);
     }
 
     /**
@@ -92,5 +85,18 @@ class Customer extends Model
     public static function getFromForm(array $data)
     {
         return (new static)->fill($data);
+    }
+
+    /**
+     * Add the shipping address to the customer.
+     *
+     * @param array $data
+     * @return \App\Shipping
+     */
+    public function addShipping(array $data = null)
+    {
+        $shipping = $data ? Shipping::fromData($data) : '';
+
+        return $shipping ? $this->shippings()->save($shipping) : '';
     }
 }
