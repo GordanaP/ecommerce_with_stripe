@@ -75,10 +75,8 @@ class Customer extends Model
      *
      * @param  \Stripe\PaymentIntent $paymentIntent
      */
-    public function completePurchase($paymentIntent)
+    public function completePurchase($order)
     {
-        $order = Order::getFromShoppingCart()->completePayment($paymentIntent);
-
         $this->placeOrder($order)->attachItems();
 
         ShoppingCart::fromSession()->destroy();

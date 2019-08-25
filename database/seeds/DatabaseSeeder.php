@@ -15,8 +15,6 @@ class DatabaseSeeder extends Seeder
 
     /**
      * Seed the application's database.
-     *
-     * @return void
      */
     public function run()
     {
@@ -31,8 +29,6 @@ class DatabaseSeeder extends Seeder
 
     /**
      * Truncate the tables.
-     *
-     * @return void
      */
     protected function cleanDatabase()
     {

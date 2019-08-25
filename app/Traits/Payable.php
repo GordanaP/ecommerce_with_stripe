@@ -6,6 +6,7 @@ use Keygen\Keygen;
 use Stripe\PaymentIntent;
 use App\Facades\ShoppingCart;
 use Illuminate\Support\Facades\Session;
+use App\Services\Factories\PurchaseFactory;
 
 trait Payable
 {
@@ -51,9 +52,7 @@ trait Payable
             ]);
         } else if ($intent->status == 'succeeded') {
 
-            $customer = $user->hasProfile() ? $user->customer : $user->addCustomer(request('billing'));
-
-            $customer->completePurchase($intent);
+            (new PurchaseFactory())->createPurchase($user, $intent);
 
             return response([
                 'success' => route('checkouts.success')
