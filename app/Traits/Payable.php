@@ -51,7 +51,9 @@ trait Payable
             ]);
         } else if ($intent->status == 'succeeded') {
 
-            $user->customer->completePurchase($intent);
+            $customer = $user->hasProfile() ? $user->customer : $user->addCustomer(request('billing'));
+
+            $customer->completePurchase($intent);
 
             return response([
                 'success' => route('checkouts.success')

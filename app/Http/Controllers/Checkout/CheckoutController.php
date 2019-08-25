@@ -8,6 +8,7 @@ use Stripe\Error\Base;
 use App\Traits\Payable;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CheckoutAddressRequest;
 
 class CheckoutController extends Controller
 {
@@ -33,7 +34,7 @@ class CheckoutController extends Controller
      * @param \App\User $user | null
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, User $user = null)
+    public function store(CheckoutAddressRequest $request, User $user = null)
     {
         Stripe::setApiKey(config('services.stripe.secret'));
 

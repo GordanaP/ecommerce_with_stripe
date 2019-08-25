@@ -6,10 +6,19 @@ var elements = stripe.elements();
 var cardElement = elements.create('card');
 cardElement.mount('#cardElement');
 
-// Stripe Payment
+// Stripe Payment Details
 var cardholderName = document.querySelector('#cardholderName');
 var cardButton = document.querySelector('#cardButton');
 var checkoutStoreUrl = "{{ route('checkouts.store', $user) }}";
+
+// Customer details
+var typeBilling = 'billing';
+var addressFields = [
+    'email', 'first_name', 'last_name', 'street_address', 'postal_code',
+    'city', 'country', 'phone'
+];
+
+clearServerSideErrorOnNewInput()
 
 cardButton.addEventListener('click', function() {
     // Create paymentMethod id
@@ -20,12 +29,19 @@ cardButton.addEventListener('click', function() {
         if(result.error) {
             console.log(result.error)
         } else {
-            // Send paymentMethod id to the server
+            // Send paymentMethod id & customer details to the server
+            var billingAddress = getAddress(typeBilling, addressFields);
+
             $.ajax({
                 url: checkoutStoreUrl,
                 type: 'POST',
                 data: {
-                    payment_method_id: result.paymentMethod.id
+                    payment_method_id: result.paymentMethod.id,
+                    billing: billingAddress
+                },
+                error: function(response) {
+                    var errors = response.responseJSON.errors;
+                    displayServerSideErrors(errors)
                 }
             })
             .then(function(response) {
@@ -64,11 +80,8 @@ function handleServerResponse(response) {
                 });
             }
         });
-    }
-    else {
-
+    } else {
         $('form').trigger('reset');
-
         window.location.replace(response.success)
     }
 }

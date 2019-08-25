@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Customer;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,4 +47,28 @@ class User extends Authenticatable
     {
         return $this->hasOne(Customer::class);
     }
+
+    /**
+     * Dteremine if the user has profile.
+     *
+     * @return boolean
+     */
+    public function hasProfile()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Add the customer's profile.
+     *
+     * @param array $data
+     * @return \App\Customer
+     */
+    public function addCustomer(array $data)
+    {
+        $customer = Customer::getFromForm($data);
+
+        return $this->customer()->save($customer);
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Utilities\Country;
 use App\Services\Utilities\Calculator;
 use Illuminate\Support\ServiceProvider;
 use App\Services\Utilities\ShoppingCart;
@@ -34,6 +35,10 @@ class UtilityServiceProvider extends ServiceProvider
 
         $this->app->bind('shopping-cart', function() {
             return new ShoppingCart();
+        });
+
+        $this->app->bind('country-list', function() {
+            return new Country();
         });
     }
 }

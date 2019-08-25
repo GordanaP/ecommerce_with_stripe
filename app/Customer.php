@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Session;
 class Customer extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'email', 'first_name', 'last_name', 'street_address', 'postal_code',
+        'city', 'country', 'phone'
+    ];
+
+    /**
      * Get the full_name attribute.
      *
      * @return string
@@ -73,5 +83,16 @@ class Customer extends Model
 
         ShoppingCart::fromSession()->destroy();
         Session::regenerate();
+    }
+
+    /**
+     * Get data from form.
+     *
+     * @param  array $data
+     * @return \App\Customer
+     */
+    public static function getFromForm(array $data)
+    {
+        return (new static)->fill($data);
     }
 }

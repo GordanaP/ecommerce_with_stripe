@@ -20,6 +20,12 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
+                <!-- Checkout -->
+                <li class="nav-item">
+                    <a class="nav-link font-semibold border bg-gray-100 mr-2" href="{{ route('checkouts.index', Auth::user() ?? '') }}">
+                        Checkout
+                    </a>
+                </li>
 
                 <!-- Shopping Cart -->
                 <li class="nav-item">
