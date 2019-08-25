@@ -12,7 +12,10 @@ var cardButton = document.querySelector('#cardButton');
 var checkoutStoreUrl = "{{ route('checkouts.store', $user) }}";
 
 // Customer details
-var typeBilling = 'billing';
+var hiddenAddress = document.querySelector('#shippingAddress');
+var toggleHiddenAddressCheckbox = document.querySelector('#toggleShippingAddress');
+var billingType = 'billing';
+var shippingType = 'shipping';
 var addressFields = [
     'email', 'first_name', 'last_name', 'street_address', 'postal_code',
     'city', 'country', 'phone'
@@ -20,7 +23,19 @@ var addressFields = [
 
 clearServerSideErrorOnNewInput()
 
+if(toggleHiddenAddressCheckbox)
+{
+    toggleHiddenAddressCheckbox.addEventListener('change', function(event) {
+        if ( ! event.target.checked) {
+            clearHiddenServerSideErrorsPureJS(hiddenAddress)
+        }
+    });
+}
+
 cardButton.addEventListener('click', function() {
+
+    clearServerSideErrors()
+
     // Create paymentMethod id
     stripe.createPaymentMethod('card', cardElement, {
         billing_details: {name: cardholderName.value}
@@ -30,14 +45,16 @@ cardButton.addEventListener('click', function() {
             console.log(result.error)
         } else {
             // Send paymentMethod id & customer details to the server
-            var billingAddress = getAddress(typeBilling, addressFields);
+            var billingAddress = getAddress(billingType, addressFields);
+            var shippingAddress = getAddress(shippingType, addressFields);
+            var checkedAddress = getCheckedAddress(toggleHiddenAddressCheckbox, billingAddress, shippingAddress)
 
             $.ajax({
                 url: checkoutStoreUrl,
                 type: 'POST',
                 data: {
                     payment_method_id: result.paymentMethod.id,
-                    billing: billingAddress
+                    address: checkedAddress
                 },
                 error: function(response) {
                     var errors = response.responseJSON.errors;

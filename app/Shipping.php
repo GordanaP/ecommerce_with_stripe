@@ -37,6 +37,16 @@ class Shipping extends Model
     }
 
     /**
+     * Get the customer that owns the shipping.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    /**
      * Get the shipping from a form.
      *
      * @param  array $data

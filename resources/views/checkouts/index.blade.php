@@ -12,13 +12,23 @@
 
     <hr>
 
-    <section id="cartInfo" class="flex justify-center mb-4">
-        @include('checkouts.partials.html._cart_info')
-    </section>
+    <div class="row">
+        <div class="col-md-6">
+            <section id="customerInfo"">
+                @include('checkouts.partials.html._customer_info')
+            </section>
+        </div>
 
-    <section id="paymentInfo" class="w-2/5 mx-auto py-3 py-4 bg-gray-200 border border-gray-300">
-        @include('checkouts.partials.html._payment_info')
-    </section>
+        <div class="col-md-6">
+            <section id="cartInfo" class="mb-2">
+                @include('checkouts.partials.html._cart_info')
+            </section>
+
+            <section id="paymentInfo" class="mx-auto py-3 py-4 bg-gray-200 border border-gray-300">
+                @include('checkouts.partials.html._payment_info')
+            </section>
+        </div>
+    </div>
 
 @endsection
 

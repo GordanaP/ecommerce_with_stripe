@@ -2,9 +2,9 @@
     @if ($address == 'billing')
         <div class="form-group">
             <input type="text" id="{{ $address }}_email" placeholder="example@domain.com"
-            class="form-control {{ $address }}_email">
+            class="form-control address_{{ $address }}_email">
 
-            @error($address.'.email')
+            @error('address.'.$address.'.email')
                 <span class="invalid-feedback" role="alert"></span>
             @enderror
         </div>
@@ -13,67 +13,67 @@
 
 <div class="form-group">
     <input type="text" id="{{ $address }}_first_name" placeholder="First Name"
-    class="form-control {{ $address }}_first_name">
+    class="form-control address_{{ $address }}_first_name">
 
-    @error($address.'.first_name')
+    @error('address.'.$address.'.first_name')
         <span class="invalid-feedback" role="alert"></span>
     @enderror
 </div>
 
 <div class="form-group">
     <input type="text" id="{{ $address }}_last_name" placeholder="Last Name"
-    class="form-control {{ $address }}_last_name">
+    class="form-control address_{{ $address }}_last_name">
 
-    @error($address.'.last_name')
+    @error('address.'.$address.'.last_name')
         <span class="invalid-feedback" role="alert"></span>
     @enderror
 </div>
 
 <div class="form-group">
     <input type="text" id="{{ $address }}_street_address" placeholder="Street Address"
-    class="form-control {{ $address }}_street_address">
+    class="form-control address_{{ $address }}_street_address">
 
-    @error($address.'.street_address')
+    @error('address.'.$address.'.street_address')
         <span class="invalid-feedback" role="alert"></span>
     @enderror
 </div>
 
 <div class="form-group">
     <input type="text" id="{{ $address }}_postal_code" placeholder="Postal Code"
-    class="form-control {{ $address }}_postal_code">
+    class="form-control address_{{ $address }}_postal_code">
 
-    @error($address.'.postal_code')
+    @error('address.'.$address.'.postal_code')
         <span class="invalid-feedback" role="alert"></span>
     @enderror
 </div>
 
 <div class="form-group">
     <input type="text" id="{{ $address }}_city" placeholder="City"
-    class="form-control {{ $address }}_city">
+    class="form-control address_{{ $address }}_city">
 
-    @error($address.'.city')
+    @error('address.'.$address.'.city')
         <span class="invalid-feedback" role="alert"></span>
     @enderror
 </div>
 
 <div class="form-group">
-    <select id="{{ $address }}_country" class="form-control {{ $address }}_country">
+    <select id="{{ $address }}_country" class="form-control address_{{ $address }}_country">
         <option>Select a country</option>
         @foreach (Country::all() as $country => $code)
             <option value="{{ $code }}">{{ $country }}</option>
         @endforeach
     </select>
 
-    @error($address.'.country')
+    @error('address.'.$address.'.country')
         <span class="invalid-feedback" role="alert"></span>
     @enderror
 </div>
 
 <div class="form-group mb-0">
     <input type="text" id="{{ $address }}_phone" placeholder="Phone Number"
-    class="form-control {{ $address }}_phone">
+    class="form-control address_{{ $address }}_phone">
 
-    @error($address.'.phone')
+    @error('address.'.  $address.'.phone')
         <span class="invalid-feedback" role="alert"></span>
     @enderror
 </div>

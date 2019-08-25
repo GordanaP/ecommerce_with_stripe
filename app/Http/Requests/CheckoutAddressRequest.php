@@ -27,28 +27,28 @@ class CheckoutAddressRequest extends FormRequest
     public function rules()
     {
         return [
-            '*.email' => [
+            'address.*.email' => [
                 'sometimes', 'required', 'email', 'unique:users,email'
             ],
-            '*.first_name' => [
+            'address.*.first_name' => [
                 'sometimes', 'required', 'max:50', new AlphaNumHyphenSpace
             ],
-            '*.last_name' => [
+            'address.*.last_name' => [
                 'sometimes', 'required', 'max:50', new AlphaNumHyphenSpace
             ],
-            '*.street_address' => [
+            'address.*.street_address' => [
                 'sometimes', 'required', 'max:150', new AlphaNumHyphenSpace
             ],
-            '*.postal_code' => [
+            'address.*.postal_code' => [
                 'sometimes', 'required', 'max:16', new AlphaNumHyphenSpace
             ],
-            '*.city' => [
+            'address.*.city' => [
                 'sometimes', 'required', 'max:50', new AlphaNumHyphenSpace
             ],
-            '*.country' => [
+            'address.*.country' => [
                 'sometimes', 'required', Rule::in(Country::codes())
             ],
-            '*.phone' => [
+            'address.*.phone' => [
                 'sometimes', 'required',
             ],
         ];

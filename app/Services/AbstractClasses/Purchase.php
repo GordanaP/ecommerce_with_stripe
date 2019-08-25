@@ -31,8 +31,9 @@ abstract class Purchase
     final public function handle()
     {
         $customer = $this->getBillingAddress();
+        $shipping = $this->getShippingAddress($customer);
 
-        return (new CompletePurchaseAction($customer))->recordPayment($this->paymentIntent);
+        return (new CompletePurchaseAction($customer))->record($shipping, $this->paymentIntent);
     }
 
     /**
@@ -43,9 +44,24 @@ abstract class Purchase
     abstract protected function getBillingAddress();
 
     /**
-     * Get the address.
+     * Get the shipping address.
+     *
+     * @param  \App\Customer $customer
+     * @return int|null
+     */
+    abstract protected function getShippingAddress($customer);
+
+    /**
+     * Get the billing address.
      *
      * @return  mixed
      */
     abstract protected function billingAddress();
+
+    /**
+     * Get the shipping address.
+     *
+     * @return  mixed
+     */
+    abstract protected function shippingAddress();
 }

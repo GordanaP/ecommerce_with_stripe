@@ -21,6 +21,10 @@ class CreateOrdersTable extends Migration
             $table->foreign('customer_id')->references('id')->on('customers')
                 ->onDelete('cascade');
 
+            $table->unsignedBigInteger('shipping_id')->nullable();
+            $table->foreign('shipping_id')->references('id')->on('shippings')
+                ->onDelete('cascade');
+
             $table->integer('subtotal_in_cents');
             $table->integer('tax_amount_in_cents');
             $table->integer('shipping_costs_in_cents');

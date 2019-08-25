@@ -38,8 +38,24 @@ class CustomerPurchase extends Purchase
     /**
      * {@inheritDoc}
      */
+    protected function getShippingAddress($customer)
+    {
+        $address = $this->shippingAddress();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function billingAddress()
     {
         return $this->user->customer;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function shippingAddress()
+    {
+        //
     }
 }

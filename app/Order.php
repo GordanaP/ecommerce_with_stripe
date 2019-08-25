@@ -29,6 +29,16 @@ class Order extends Model
     }
 
     /**
+     * Get the shipping that owns the order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function shipping()
+    {
+        return $this->belongsTo(Shipping::class);
+    }
+
+    /**
      * Get the products that belong to the order.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -50,6 +60,19 @@ class Order extends Model
         $orderSummary = ShoppingCart::fromSession()->getSummary()->toArray();
 
         return (new static)->fill($orderSummary);
+    }
+
+    /**
+     * Complete order with shipping address;
+     *
+     * @param  integer $shippingId
+     * @return \App\Order
+     */
+    public function completeShipping($shippingId)
+    {
+        $this->shipping_id = $shippingId;
+
+        return $this;
     }
 
     /**

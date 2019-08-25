@@ -40,8 +40,26 @@ class AuthUserPurchase extends Purchase
     /**
      * {@inheritDoc}
      */
+    protected function getShippingAddress($customer)
+    {
+        $shipping = $this->shippingAddress();
+
+        return optional($customer->addShipping($shipping))->id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function billingAddress()
     {
-        return request('billing');
+        return request('address.billing');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function shippingAddress()
+    {
+        return request('address.shipping');
     }
 }

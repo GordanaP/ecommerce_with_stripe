@@ -25,14 +25,15 @@ class CompletePurchaseAction
     }
 
     /**
-     * Complete the order.
+     * Complete the purcahse.
      *
+     * @param  integer $shipping
      * @param  \Stripe\PaymentIntent $paymentIntent
      * @return  \App\Order
      */
-    public function recordPayment($paymentIntent)
+    public function record($shipping, $paymentIntent)
     {
-        $order = $this->getOrder($paymentIntent);
+        $order = $this->getOrder($shipping, $paymentIntent);
 
         return $this->customer->completePurchase($order);
     }
@@ -40,12 +41,14 @@ class CompletePurchaseAction
     /**
      * Get the order.
      *
+     * @param  integer $shipping
      * @param  \Stripe\PaymentIntent $paymentIntentIntent
      * @return \App\Order
      */
-    protected function getOrder($paymentIntent)
+    protected function getOrder($shipping, $paymentIntent)
     {
         return Order::getFromShoppingCart()
+            ->completeShipping($shipping)
             ->completePayment($paymentIntent);
     }
 }
