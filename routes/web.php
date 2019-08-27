@@ -9,7 +9,7 @@ Route::post('/test/{user?}', 'TestController@store')->name('test.store');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home/{user}', 'HomeController@index')->name('home');
 
 /**
  * Product
@@ -37,3 +37,13 @@ Route::get('checkout/payment/success','Checkout\CheckoutSuccessController')
     ->name('checkouts.success');
 Route::get('checkout/payment/error','Checkout\CheckoutErrorController')
     ->name('checkouts.error');
+
+/**
+ * UserShipping
+ */
+Route::get('users/{user}/select-delivery-address',  'User\UserShippingController@index')
+    ->name('users.select.delivery');
+Route::resource('users.shippings', 'User\UserShippingController', [
+    'only' => ['index', 'create', 'store']
+]);
+

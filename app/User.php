@@ -3,13 +3,14 @@
 namespace App;
 
 use App\Customer;
+use App\Traits\User\HasAddress;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasAddress;
 
     /**
      * The attributes that are mass assignable.
@@ -49,6 +50,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Get all of the shipping addresses for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function shippings()
+    {
+        return $this->hasManyThrough('App\Shipping', 'App\Customer');
+    }
+
+    /**
      * Dteremine if the user has profile.
      *
      * @return boolean
@@ -69,6 +80,23 @@ class User extends Authenticatable
         $customer = Customer::getFromForm($data);
 
         return $this->customer()->save($customer);
+    }
+
+    /**
+     * Get shipping address on checkout.
+     *
+     * @param  \App\Shipping $shipping
+     * @return mixed
+     */
+    public function getCheckoutShippingAddress($shipping = null)
+    {
+        if (request()->route()->named('checkout.users.index')) {
+            return $this->getDefaultAddress();
+        }
+
+        if(request()->route()->named('checkout.users.shippings.index')) {
+            return $shipping ?? $this->customer;
+        }
     }
 
 }

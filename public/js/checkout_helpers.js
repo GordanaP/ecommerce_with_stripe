@@ -5,7 +5,7 @@
  * @param  array shippingAddress
  * @return array
  */
-function getCheckedAddress(checkbox, billingAddress, shippingAddress)
+function getCheckedAddresses(checkbox, billingAddress, shippingAddress)
 {
     if (isChecked(checkbox)) {
         var address = {
@@ -22,13 +22,24 @@ function getCheckedAddress(checkbox, billingAddress, shippingAddress)
 }
 
 /**
+ * Get customer shipping address.
+ *
+ * @param  App\Shipping\ customerShippingAddress
+ * @return JS object
+ */
+function getShippingAddressFromDB(customerShippingAddress = null)
+{
+    return customerShippingAddress  ? { shipping: customerShippingAddress } : '';
+}
+
+/**
  * Get the checkout addresses.
  *
  * @param  string addressType
  * @param  array adressFields
  * @return array
  */
-function getAddress(addressType, addressFields)
+function getAddressFromForm(addressType, addressFields)
 {
     var address = { };
 

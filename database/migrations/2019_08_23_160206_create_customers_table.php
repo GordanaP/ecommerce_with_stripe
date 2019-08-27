@@ -16,9 +16,10 @@ class CreateCustomersTable extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
+            $table->string('email')->nullable();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('street_address');

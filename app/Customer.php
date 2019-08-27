@@ -88,6 +88,17 @@ class Customer extends Model
     }
 
     /**
+     * Customer has a specific shipping address stored.
+     *
+     * @param  array  $address | null
+     * @return boolean
+     */
+    public function hasStoredShippingAddress($address = null)
+    {
+        return $address ? collect($address)->keys()->contains('customer_id') : '';
+    }
+
+    /**
      * Add the shipping address to the customer.
      *
      * @param array $data
@@ -95,7 +106,7 @@ class Customer extends Model
      */
     public function addShipping(array $data = null)
     {
-        $shipping = $data ? Shipping::fromData($data) : '';
+        $shipping = $data ? Shipping::fromForm($data) : '';
 
         return $shipping ? $this->shippings()->save($shipping) : '';
     }

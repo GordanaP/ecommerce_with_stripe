@@ -2,28 +2,18 @@
 
 namespace App\Services\UseCases;
 
-use App\User;
+use App\Customer;
 use App\Services\AbstractClasses\Purchase;
 
-class CustomerPurchase extends Purchase
+class GuestPurchase extends Purchase
 {
-    /**
-     * The user.
-     *
-     * @var \App\User
-     */
-    public $user;
-
     /**
      * Create a new class instance.
      *
-     * @param \App\User $user
      * @param \Stripe\PaymentIntent $paymentIntent
      */
-    public function __construct(User $user, $paymentIntent)
+    public function __construct($paymentIntent)
     {
-        $this->user = $user;
-
         parent::__construct($paymentIntent);
     }
 
@@ -32,7 +22,9 @@ class CustomerPurchase extends Purchase
      */
     protected function getBillingAddress()
     {
-        return $this->billingAddress();
+        $data = $this->billingAddress();
+
+        return Customer::create($data);
     }
 
     /**
@@ -40,7 +32,9 @@ class CustomerPurchase extends Purchase
      */
     protected function getShippingAddress($customer)
     {
-        return optional($this->shippingAddress())['id'];
+        $shipping = $this->shippingAddress();
+
+        return optional($customer->addShipping($shipping))->id;
     }
 
     /**
@@ -48,7 +42,7 @@ class CustomerPurchase extends Purchase
      */
     protected function billingAddress()
     {
-        return $this->user->customer;
+        return request('address.billing');
     }
 
     /**

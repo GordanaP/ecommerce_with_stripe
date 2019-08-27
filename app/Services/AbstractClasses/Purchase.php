@@ -52,16 +52,16 @@ abstract class Purchase
     abstract protected function getShippingAddress($customer);
 
     /**
-     * Get the billing address.
+     * The billing address.
      *
      * @return  mixed
      */
     abstract protected function billingAddress();
 
     /**
-     * Get the shipping address.
+     * The shipping address.
      *
-     * @return  mixed
+     * @return  array
      */
     abstract protected function shippingAddress();
 }

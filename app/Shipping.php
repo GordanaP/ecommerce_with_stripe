@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Traits\Customer\HasAttributes;
 use Illuminate\Database\Eloquent\Model;
 
 class Shipping extends Model
 {
+    use HasAttributes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -52,8 +55,32 @@ class Shipping extends Model
      * @param  array $data
      * @return \App\Shipping
      */
-    public static function fromData(array $data)
+    public static function fromForm(array $data)
     {
         return (new static)->fill($data);
+    }
+
+    /**
+     * Set the address as default.
+     *
+     * @return void
+     */
+    public function setAsDefault()
+    {
+        $this->default_address = true;
+
+        $this->save();
+    }
+
+    /**
+     * Set the address as non default.
+     *
+     * @return void
+     */
+    public function setAsNonDefault()
+    {
+        $this->default_address = false;
+
+        $this->save();
     }
 }

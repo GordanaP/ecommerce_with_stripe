@@ -11,7 +11,12 @@ var cardholderName = document.querySelector('#cardholderName');
 var cardButton = document.querySelector('#cardButton');
 var checkoutStoreUrl = "{{ route('checkouts.store', $user) }}";
 
-// Customer details
+// Customer with profile
+var registeredCustomer = @json(optional($user)->hasProfile());
+var customerShippingAddress = @json( optional($user)->defaultAddressIsShipping())
+    ? @json(optional($user)->getDefaultAddress()) : null;
+
+// Customer without profile or guest
 var hiddenAddress = document.querySelector('#shippingAddress');
 var toggleHiddenAddressCheckbox = document.querySelector('#toggleShippingAddress');
 var billingType = 'billing';
@@ -45,16 +50,17 @@ cardButton.addEventListener('click', function() {
             console.log(result.error)
         } else {
             // Send paymentMethod id & customer details to the server
-            var billingAddress = getAddress(billingType, addressFields);
-            var shippingAddress = getAddress(shippingType, addressFields);
-            var checkedAddress = getCheckedAddress(toggleHiddenAddressCheckbox, billingAddress, shippingAddress)
+            var billingFromForm = getAddressFromForm(billingType, addressFields);
+            var shippingFromForm = getAddressFromForm(shippingType, addressFields);
+            var checkedAddresses = getCheckedAddresses(toggleHiddenAddressCheckbox, billingFromForm, shippingFromForm)
+            var shippingFromDB = getShippingAddressFromDB(customerShippingAddress)
 
             $.ajax({
                 url: checkoutStoreUrl,
                 type: 'POST',
                 data: {
                     payment_method_id: result.paymentMethod.id,
-                    address: checkedAddress
+                    address: registeredCustomer ? shippingFromDB : checkedAddresses
                 },
                 error: function(response) {
                     var errors = response.responseJSON.errors;

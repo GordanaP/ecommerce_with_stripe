@@ -23,7 +23,9 @@ class CheckoutController extends Controller
     public function index(User $user = null)
     {
         return view('checkouts.index')->with([
-            'user' => $user ?? ''
+            'user' => $user,
+            'default_delivery' => optional($user)->getDefaultAddress(),
+            'shipping' => ''
         ]);
     }
 

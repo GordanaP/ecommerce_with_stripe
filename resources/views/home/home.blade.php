@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '! My Settings')
+@section('title', 'Homepage')
 
 @section('content')
     <h2 class="mb-0">
@@ -15,3 +15,4 @@
         </div>
     </div>
 @endsection
+

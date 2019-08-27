@@ -9,12 +9,11 @@
 @section('content')
 
     <h4>Checkout</h4>
-
     <hr>
 
     <div class="row">
         <div class="col-md-6">
-            <section id="customerInfo"">
+            <section id="customerInfo">
                 @include('checkouts.partials.html._customer_info')
             </section>
         </div>
