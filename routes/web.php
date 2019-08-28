@@ -6,6 +6,9 @@ Route::get('/', function () {
 
 Route::get('/test/{user?}', 'TestController@index')->name('test.index');
 Route::post('/test/{user?}', 'TestController@store')->name('test.store');
+Route::get('test/selected-shipping/{user}/{shipping?}', 'TestController@show')
+    ->name('test.show.shippings');
+
 
 Auth::routes();
 
@@ -37,13 +40,17 @@ Route::get('checkout/payment/success','Checkout\CheckoutSuccessController')
     ->name('checkouts.success');
 Route::get('checkout/payment/error','Checkout\CheckoutErrorController')
     ->name('checkouts.error');
+Route::get('checkout/users/select-shipping-address/{user}/{shipping?}',
+    'Checkout\CheckoutUserShippingController@index')
+    ->name('checkout.users.shippings.index');
 
 /**
  * UserShipping
  */
-Route::get('users/{user}/select-delivery-address',  'User\UserShippingController@index')
-    ->name('users.select.delivery');
+Route::patch('users-shippings/{user}/{shipping?}', 'User\UserShippingController@update')
+    ->name('users.shippings.update');
+Route::get('users/{user}/select-shipping-address',  'User\UserShippingController@index')
+    ->name('users.select.shipping');
 Route::resource('users.shippings', 'User\UserShippingController', [
     'only' => ['index', 'create', 'store']
 ]);
-

@@ -23,6 +23,16 @@ class Customer extends Model
     ];
 
     /**
+     * Get the customer's attribute.
+     *
+     * @return boolean
+     */
+    public function getIsDefaultAttribute()
+    {
+        return $this->shippings->where('default_address', true)->isEmpty();
+    }
+
+    /**
      * Get the user that owns the customer.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

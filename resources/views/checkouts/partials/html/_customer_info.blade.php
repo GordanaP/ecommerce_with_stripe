@@ -17,6 +17,7 @@
     @withProfile($user)
         @include('checkouts.partials.html._customer_addresses',[
             'title' => 'Shipping address',
+            'route' => route('users.select.shipping', $user),
             'default_delivery' => $default_delivery,
             'customer' => $shipping ?: ($default_delivery ?: $user->customer),
         ])

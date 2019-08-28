@@ -40,7 +40,10 @@ class CustomerPurchase extends Purchase
      */
     protected function getShippingAddress($customer)
     {
-        return optional($this->shippingAddress())['id'];
+        $shipping = $this->shippingAddress();
+
+        return $shipping && $customer->hasStoredShippingAddress($shipping) ? $shipping['id'] : null;
+        // return optional($this->shippingAddress())['id'];
     }
 
     /**

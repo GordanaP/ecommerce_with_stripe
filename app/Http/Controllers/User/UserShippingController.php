@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\User;
+use App\Shipping;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -68,9 +69,11 @@ class UserShippingController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user, Shipping $shipping = null)
     {
-        //
+        $user->setNewDefaultAddress($shipping);
+
+        return back();
     }
 
     /**

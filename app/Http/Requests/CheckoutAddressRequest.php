@@ -27,8 +27,11 @@ class CheckoutAddressRequest extends FormRequest
     public function rules()
     {
         return [
-            'address.*.email' => [
+            'address.billing.email' => [
                 'sometimes', 'required', 'email', 'unique:users,email'
+            ],
+            'address.billing.email' => [
+                'sometimes', 'nullable', 'email', 'unique:users,email'
             ],
             'address.*.first_name' => [
                 'sometimes', 'required', 'max:50', new AlphaNumHyphenSpace
@@ -37,7 +40,7 @@ class CheckoutAddressRequest extends FormRequest
                 'sometimes', 'required', 'max:50', new AlphaNumHyphenSpace
             ],
             'address.*.street_address' => [
-                'sometimes', 'required', 'max:150', new AlphaNumHyphenSpace
+                'sometimes', 'required', 'max:150'
             ],
             'address.*.postal_code' => [
                 'sometimes', 'required', 'max:16', new AlphaNumHyphenSpace

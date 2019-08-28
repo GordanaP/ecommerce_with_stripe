@@ -13,8 +13,7 @@ var checkoutStoreUrl = "{{ route('checkouts.store', $user) }}";
 
 // Customer with profile
 var registeredCustomer = @json(optional($user)->hasProfile());
-var customerShippingAddress = @json( optional($user)->defaultAddressIsShipping())
-    ? @json(optional($user)->getDefaultAddress()) : null;
+var customerCheckedShipping = @json(optional($user)->getCheckoutShippingAddress($shipping))
 
 // Customer without profile or guest
 var hiddenAddress = document.querySelector('#shippingAddress');
@@ -28,8 +27,7 @@ var addressFields = [
 
 clearServerSideErrorOnNewInput()
 
-if(toggleHiddenAddressCheckbox)
-{
+if(toggleHiddenAddressCheckbox) {
     toggleHiddenAddressCheckbox.addEventListener('change', function(event) {
         if ( ! event.target.checked) {
             clearHiddenServerSideErrorsPureJS(hiddenAddress)
@@ -52,15 +50,15 @@ cardButton.addEventListener('click', function() {
             // Send paymentMethod id & customer details to the server
             var billingFromForm = getAddressFromForm(billingType, addressFields);
             var shippingFromForm = getAddressFromForm(shippingType, addressFields);
-            var checkedAddresses = getCheckedAddresses(toggleHiddenAddressCheckbox, billingFromForm, shippingFromForm)
-            var shippingFromDB = getShippingAddressFromDB(customerShippingAddress)
+            var guestAddresses = getCheckedAddresses(toggleHiddenAddressCheckbox, billingFromForm, shippingFromForm)
+            var customerShippingAddress = getShippingAddressFromDB(customerCheckedShipping)
 
             $.ajax({
                 url: checkoutStoreUrl,
                 type: 'POST',
                 data: {
                     payment_method_id: result.paymentMethod.id,
-                    address: registeredCustomer ? shippingFromDB : checkedAddresses
+                    address: registeredCustomer ? customerShippingAddress : guestAddresses
                 },
                 error: function(response) {
                     var errors = response.responseJSON.errors;
